@@ -1,0 +1,6 @@
+import torch
+data = torch.load("24task-D/kitchen-mixed-no-slide.pt")
+print(len(data))
+for i in range(len(data)):
+    data[i]["observations"] = data[i]["states"]
+torch.save(data, "24task-D/kitchen-mixed-no-slide.pt")
