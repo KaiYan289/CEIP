@@ -26,14 +26,34 @@ As multiple sets of environment is needed, virtual environment like anaconda are
 
 ### Fetchreach
 
-For fetchreach experiment, we use a special set of environment with python 3.8.5. See env_fetchreach.txt for a complete table of packages.
-
+For fetchreach experiment, we use a special set of environment with python 3.8.5. The requirements are:
+```
+torch==1.10.0
+gym==0.21.0
+numpy==1.21.4
+h5py==2.10.0
+stable-baselines3==1.3.0
+imageio
+wandb
+tqdm
+matplotlib
+```
 We re-write the code of gym robotics environment, which is uploaded in CEIP/robotics. Before running RL for fetchreach, you need to substitute the gym/envs/robotics folder of gym package with our CEIP/robotics folder.
 
 ### Others
 
-For kitchen-SKiLD, kitchen-FIST and office, we use another set of environment with python 3.8.5. See env_others.txt for a complete table of packages.
-
+For kitchen-SKiLD, kitchen-FIST and office, we use another set of environment with python 3.8.5. The requirements are:
+```
+mujoco-py==2.0.2.13
+stable-baselines3==1.3.0
+torch==1.10.0
+gym>=0.15.4
+h5py==2.10.0
+imageio
+wandb
+tqdm
+matplotlib
+```
 For kitchen environment, a fork of **d4rl** by the author of SKiLD[1] is required. The URL for the repo is https://github.com/kpertsch/d4rl .
 
 For office environment, a fork of **roboverse** by the author of SKiLD is required The URL for the repo is https://github.com/VentusYue/roboverse .
