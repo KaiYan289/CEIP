@@ -83,7 +83,7 @@ mkdir models
 wandb.login(key=XXXXXXX)
 wandb.init(entity=XXXXXXX, project= ...
 ```
-change XXXXXXX to your key and username for wandb. See wandb official website https://docs.wandb.ai/ for this.
+change XXXXXXX to your key and username for wandb. See wandb official website https://docs.wandb.ai/ for this. We use XXXXXXX for anonimity.
 
 6. run the code for training flow (see the next section for detailed commands).
 
@@ -131,7 +131,40 @@ run RL (in main directory):
 
 #### PARROT
 
+Training flows (in demo/PARROT/fetchreach): 
 
+**PARROT-TATS**: ```python demo_BCFlow_all.py --seed 1000009```
+
+**PARROT-TA**: ```python demo_BCFLOW_allwithoutDdemo.py --seed 1000009``` 
+
+**PARROT_4way**: ```python demo_BCFLOW_fourwayrelatedwithDdemo.py --seed 1000009```
+
+**PARROT_2way**: ```python demo_BCFLOW_relatedwithoutDdemo.py --seed 1000009```
+
+**PARROT_2way+TS**: ```python demo_BCFLOW_relatedwithDdemo.py --seed 1000009```
+
+**PARROT_TS_noEX**: ```python demo_Ddemoonly.py --seed 1000009```
+
+**PARROT_TS_EX**: ```python demo_Ddemoonly_withdatabase.py --seed 1000009```
+
+run RL (in the main directory):
+
+**PARROT-TATS**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method alone_all```
+
+**PARROT-TA**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method alone_allwithoutDdemo``` 
+
+**PARROT_4way**: ```python demo_BCFLOW_fourwayrelatedwithDdemo.py --seed 1000009```
+
+**PARROT_2way**: ```python demo_BCFLOW_relatedwithoutDdemo.py --seed 1000009```
+
+**PARROT_2way+TS**: ```python demo_BCFLOW_relatedwithDdemo.py --seed 1000009```
+
+**PARROT_TS_noEX**: ```python demo_Ddemoonly.py --seed 1000009```
+
+**PARROT_TS_EX**: ```python demo_Ddemoonly_withdatabase.py --seed 1000009```
+
+
+**PARROT_TS_EX_forward**: ```python demo_Ddemoonly_withdatabase.py --seed 1000009```
 
 ### kitchen-SKiLD
 
