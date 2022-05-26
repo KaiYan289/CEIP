@@ -18,6 +18,8 @@ CEIP/log: the logged results for RL runs.
 
 CEIP/RL: the code for RL runs. 
 
+CEIP/robotics: substituting part of the code in gym for fetchreach; see dependency section below for details.
+
 ## Dependency
 
 As multiple sets of environment is needed, virtual environment like anaconda are strongly recommended. 
@@ -26,7 +28,7 @@ As multiple sets of environment is needed, virtual environment like anaconda are
 
 For fetchreach experiment, we use a special set of environment with python 3.8.5. See env_fetchreach.txt for a complete table of packages.
 
-
+We re-write the code of gym robotics environment, which is uploaded in CEIP/robotics. Before running RL for fetchreach, you need to substitute the gym/envs/robotics folder of gym package with our CEIP/robotics folder.
 
 ### Others
 
@@ -69,11 +71,53 @@ change XXXXXXX to your key and username for wandb. See wandb official website ht
 
 8. The results of RL are stored in CEIP/log directory; log into your wandb account to check flow training results.
 
-## Detailed Commands for Each Result
+## Detailed Steps for Reproducing Results
 
 
 ### Fetchreach
 
+#### Ours
+Training flows (in demo/ours/fetchreach):
+
+**ours_noTS_noEX**: set line 50 of demo_ours.py to "setenv(args.env_name, 10, 4, **8**)", then run ```python demo_ours.py --seed 1000009```.
+
+**ours_TS_noEX**: set line 50 of demo_ours.py to "setenv(args.env_name, 10, 4, **9**)", then run ```python demo_ours.py --seed 1000009```.
+
+**ours_noTS_EX**: set line 50 of demo_ours_withdatabase.py to "setenv(args.env_name, 10, 4, **8**)", then run ```python demo_ours_withdatabase.py --seed 1000009```.
+
+**ours_TS_EX**: set line 50 of demo_ours_withdatabase.py to "setenv(args.env_name, 10, 4, **9**)", then run ```python demo_ours_withdatabase.py --seed 1000009```.
+
+**ours_4way** (below are part of our ablation test; see paper for their meaning): ```python demo_ours_fourwayrelated.py --seed 1000009```
+
+**ours_2way**: ```python demo_ours_related.py --seed 1000009```
+
+run RL (in main directory):
+
+**ours_noTS_noEX**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method ours``` (change 4.5 to 5.5, 6.5, 7.5 for other directions)
+
+**ours_TS_noEX**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method ours_withTS```
+
+**ours_noTS_EX**: ```python RL/RL_fetch_withdatabase.py --seed 19 --modelseed 1000009 --direction 4.5 --transize 1600 --transfersize 160 --method ours_withdatabase --pushforward no```
+
+**ours_TS_EX**: ```python RL/RL_fetch_withdatabase.py --seed 19 --modelseed 1000009 --direction 4.5 --transize 1600 --transfersize 160 --method ours_withTS_withdatabase --pushforward no```
+
+**ours_noTS_EX_forward**: ```python RL/RL_fetch_withdatabase.py --seed 19 --modelseed 1000009 --direction 4.5 --transize 1600 --transfersize 160 --method ours_withdatabase --pushforward yes```
+
+**ours_TS_EX_forward**: ```python RL/RL_fetch_withdatabase.py --seed 19 --modelseed 1000009 --direction 4.5 --transize 1600 --transfersize 160 --method ours_withTS_withdatabase --pushforward yes```
+
+**ours_4way**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method ours_fourwayrelated```
+
+**ours_2way**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method ours_related```
+
+#### PARROT
+
+
+
+### kitchen-SKiLD
+
+### kitchen-FIST
+
+### office
 
 
 ## Reference
