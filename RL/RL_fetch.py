@@ -66,6 +66,8 @@ class Wrapper_Env_Hard(gym.Env):
             self.pretrained_model = torch.load("demo/PARROT/fetchreach/models/1layer_debug_seed"+str(args.modelseed)+"_decoupled_phase_withBN_fetchreach_1BCFLOW_Ddemoonly_fetchhard_hidden_"+str(args.direction)+"_train.pth").to(device).double() 
         elif self.args_type == "alone_relatedwithDdemo":
             self.pretrained_model = torch.load("demo/PARROT/fetchreach/models/1layer_debug_seed"+str(args.modelseed)+"_decoupled_phase_withBN_fetchreach_1BCFLOW_relatedwithDdemo_fetchhard_hidden_"+str(args.direction)+"_train.pth").to(device).double()
+        elif self.args_type == "alone_fourwayrelatedwithDdemo":
+            self.pretrained_model = torch.load("demo/PARROT/fetchreach/models/1layer_debug_seed"+str(args.modelseed)+"_decoupled_phase_withBN_fetchreach_1BCFLOW_fourwayrelatedwithDdemo_fetchhard_hidden_"+str(args.direction)+"_train.pth").to(device).double()
         elif self.args_type == "alone_relatedwithoutDdemo":
             self.pretrained_model = torch.load("demo/PARROT/fetchreach/models/1layer_debug_seed"+str(args.modelseed)+"_decoupled_phase_withBN_fetchreach_1BCFLOW_relatedwithoutDdemo_fetchhard_hidden_"+str(args.direction)+"_train.pth"").to(device).double()
         elif self.args_type == "alone_fourwayrelatedwithDdemo":
