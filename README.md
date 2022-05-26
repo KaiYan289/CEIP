@@ -137,7 +137,7 @@ Training flows (in demo/PARROT/fetchreach):
 
 **PARROT-TA**: ```python demo_BCFLOW_allwithoutDdemo.py --seed 1000009``` 
 
-**PARROT_4way**: ```python demo_BCFLOW_fourwayrelatedwithDdemo.py --seed 1000009```
+**PARROT_4way+TS**: ```python demo_BCFLOW_fourwayrelatedwithDdemo.py --seed 1000009```
 
 **PARROT_2way**: ```python demo_BCFLOW_relatedwithoutDdemo.py --seed 1000009```
 
@@ -153,24 +153,68 @@ run RL (in the main directory):
 
 **PARROT-TA**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method alone_allwithoutDdemo``` 
 
-**PARROT_4way**: ```python demo_BCFLOW_fourwayrelatedwithDdemo.py --seed 1000009```
+**PARROT_4way+TS**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method alone_fourwayrelatedwithDdemo```
 
-**PARROT_2way**: ```python demo_BCFLOW_relatedwithoutDdemo.py --seed 1000009```
+**PARROT_2way**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method alone_relatedwithoutDdemo```
 
-**PARROT_2way+TS**: ```python demo_BCFLOW_relatedwithDdemo.py --seed 1000009```
+**PARROT_2way+TS**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method alone_relatedwithDdemo```
 
-**PARROT_TS_noEX**: ```python demo_Ddemoonly.py --seed 1000009```
+**PARROT_TS_noEX**: ```python RL/RL_fetch.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method alone_Ddemoonly```
 
-**PARROT_TS_EX**: ```python demo_Ddemoonly_withdatabase.py --seed 1000009```
+**PARROT_TS_EX**: ```python RL/RL_fetch_withdatabase.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method alone_withdatabase --pushforward no```
 
-
-**PARROT_TS_EX_forward**: ```python demo_Ddemoonly_withdatabase.py --seed 1000009```
+**PARROT_TS_EX_forward**: ```python RL/RL_fetch_withdatabase.py --seed 19 --modelseed 1000009 --direction 4.5 --trainsize 1600 --transfersize 160 --method alone_withdatabase --pushforward yes```
 
 ### kitchen-SKiLD
 
-### kitchen-FIST
+#### ours
 
-### office
+Training flows (in demo/ours/kitchen_SKiLD):
+
+**ours-noTS-noEX**: set line 70 of demo_ours_forall.py to "setenv(args.env_name, 60, 9, **24**)"; set line 60 of demo_ours_forall.py to "hps_model_setter("type", **"1layer_single"**)"; run ```python demo_ours_forall.py --seed 1000009```
+
+**ours-TS-noEX**: set line 70 of demo_ours_forall.py to "setenv(args.env_name, 60, 9, **25**)"; set line 60 of demo_ours_forall.py to "hps_model_setter("type", **"1layer_debug"**)"; run ```python demo_ours_forall.py --seed 1000009```
+
+**ours-noTS-EX**: set line 70 of demo_ours_forall.py to "setenv(args.env_name, 60, 9, **24**)"; set line 60 of demo_ours_forall.py to "hps_model_setter("type", **"1layer_single"**)"; run ```python demo_ours_forall.py --seed 1000009```
+
+**ours-TS-EX**: set line 70 of demo_ours_forall.py to "setenv(args.env_name, 60, 9, **25**)"; set line 60 of demo_ours_forall.py to "hps_model_setter("type", **"1layer_debug"**)"; run ```python demo_ours_forall.py --seed 1000009```
+
+Run RL (in main directory):
+
+**ours-noTS-noEX**: ```python RL/RL_PPO_formal_nodatabase_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 300 --pushforward no``` (300 for SKiLD-A, 301 for SKiLD-B)
+
+
+**ours-TS-noEX**: ```python RL/RL_PPO_formal_nodatabase_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 400 --pushforward no``` (400 for SKiLD-A, 401 for SKiLD-B)
+
+**ours-noTS-EX**: ```python RL/RL_PPO_formal_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 100 -- pushforward no``` (100 for SKiLD-A, 101 for SKiLD-B)
+
+**ours-TS-EX**: ```python RL/RL_PPO_formal_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 200 -- pushforward no``` (200 for SKiLD-A, 201 for SKiLD-B)
+
+**ours-noTS-EX-forward**: ```python RL/RL_PPO_formal_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 100 --pushforward yes```
+
+**ours-TS-EX-forward**: ```python RL/RL_PPO_formal_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 200 -- pushforward yes```
+
+#### PARROT
+
+Training flows (in demo/PARROT/kitchen_SKiLD):
+
+**PARROT-TA**, **PARROT-TS-noEX**: ```python demo_ours_forall_nodatabase.py --seed 1000009```
+
+**PARROT-TS-EX**: ```python demo_ours_forall_withdatabase.py --seed 1000009```
+
+Run RL (in main directory):
+
+**PARROT-TA**: ```python RL/RL_PPO_formal_nodatabase_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 600``` (600 for SKiLD-A, 601 for SKiLD-B)
+
+**PARROT-TS-noEX**: ```python RL/RL_PPO_formal_nodatabase_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 500``` (500 for SKiLD-A, 501 for SKiLD-B)
+
+**PARROT-TS-EX**: ```python RL/RL_PPO_formal_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 230 --pushforward no``` (230 for SKiLD-A, 231 for SKiLD-B)
+
+**PARROT-TS-EX-forward**: ```python RL/RL_PPO_formal_kitchen_SKiLD.py --seed 19 --modelseed 1000009 --TL 500 --pushforward yes```
+
+### Others
+
+Kitchen-FIST and office can be run in a similar way to kitchen-SKiLD; see the code for detailed command.
 
 
 ## Reference
