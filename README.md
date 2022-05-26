@@ -24,11 +24,13 @@ As multiple sets of environment is needed, virtual environment like anaconda are
 
 ### Fetchreach
 
-For fetchreach experiment, we use a special set of environment with python 3.8.5.
+For fetchreach experiment, we use a special set of environment with python 3.8.5. See env_fetchreach.txt for a complete table of packages.
+
+
 
 ### Others
 
-For kitchen-SKiLD, kitchen-FIST and office, we use another set of environment with python 3.8.5.
+For kitchen-SKiLD, kitchen-FIST and office, we use another set of environment with python 3.8.5. See env_others.txt for a complete table of packages.
 
 For kitchen environment, a fork of **d4rl** by the author of SKiLD[1] is required. The URL for the repo is https://github.com/kpertsch/d4rl .
 
@@ -69,10 +71,12 @@ change XXXXXXX to your key and username for wandb. See wandb official website ht
 
 ## Detailed Commands for Each Result
 
+
 ### Fetchreach
 
 
 
 ## Reference
 
+[1] K. Pertsch, Y. Lee, Y. Wu, and J. J. Lim. Demonstration-guided reinforcement learning with learned skills. In CoRL, 2021.
 
