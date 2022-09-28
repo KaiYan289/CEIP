@@ -1,6 +1,6 @@
 # CEIP
 
-This repository is the code of CEIP and PARROT method for NeurIPS 2022 submission "CEIP: Combining Explicit and Implicit Priors for Reinforcement Learning with Demonstrations".
+This repository is the code of CEIP and PARROT method for NeurIPS 2022 proceedings "CEIP: Combining Explicit and Implicit Priors for Reinforcement Learning with Demonstrations".
 
 The dataset can be downloaded at https://www.dropbox.com/s/7wg61g7qjmeg0bv/data.zip?dl=0 . The "data" folder is already structured and should be placed under the CEIP directory.
 
