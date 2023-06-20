@@ -35,16 +35,14 @@ def seed_all(seed):
     # torch.use_deterministic_algorithms(True)
     torch.backends.cudnn.benchmark = False
 
- 
-class Flowtrainer:
+class Flowtrainer: # parallelized version
     def __init__(self, args, hps_env, hps_train, hps_model):
         self.args = args
-        self.device = torch.device('cuda:0')# get_best_gpu()
+        self.device = torch.device('cuda:0')
         
         project_name = args.env_name
         
         self.hps_env, self.hps_train, self.hps_model = hps_env, hps_train, hps_model
-        
         seed_all(args.seed)
         
         if hps_env["task_num"] != 1: # CEIP 
@@ -66,19 +64,19 @@ class Flowtrainer:
             
             elif hps_env["env_name_global"] == "fetchreach":
                 if hps_env["task_num"] == 8: # withoutTS 
-                    self.task_list = ["fetchhard_hidden_0.0", "fetchhard_hidden_1.0", "fetchhard_hidden_2.0", "fetchhard_hidden_3.0", "fetchhard_hidden_4.0", "fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_7.0", hps_env["env_name"]]
+                    self.task_list = ["fetchhard_hidden_"+str(i)+".0" for i in range(8)] + [hps_env["env_name"]]
                 elif hps_env["task_num"] == 9: # withTS 
-                    self.task_list = ["fetchhard_hidden_0.0", "fetchhard_hidden_1.0", "fetchhard_hidden_2.0", "fetchhard_hidden_3.0", "fetchhard_hidden_4.0", "fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_7.0", hps_env["env_name"], hps_env["env_name"]]
+                    self.task_list = ["fetchhard_hidden_"+str(i)+".0" for i in range(8)] + [hps_env["env_name"], hps_env["env_name"]]
                 elif hps_env["task_num"] == 2: # related
-                    if args.env_name.find("4.5") != -1: self.task_list = ["fetchhard_hidden_4.0", "fetchhard_hidden_5.0", "fetchhard_hidden_4.5"]#["fetchhard_hidden_0.0", "fetchhard_hidden_1.0", "fetchhard_hidden_2.0", "fetchhard_hidden_3.0", "fetchhard_hidden_4.0", "fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_7.0", hps_env["env_name"]] #
-                    elif args.env_name.find("5.5") != -1: self.task_list = ["fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_5.5"]#["fetchhard_hidden_0.0", "fetchhard_hidden_1.0", "fetchhard_hidden_2.0", "fetchhard_hidden_3.0", "fetchhard_hidden_4.0", "fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_7.0", hps_env["env_name"]]#
-                    elif args.env_name.find("6.5") != -1: self.task_list = ["fetchhard_hidden_6.0", "fetchhard_hidden_7.0", "fetchhard_hidden_6.5"]#["fetchhard_hidden_0.0", "fetchhard_hidden_1.0", "fetchhard_hidden_2.0", "fetchhard_hidden_3.0", "fetchhard_hidden_4.0", "fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_7.0", hps_env["env_name"]]#
+                    if args.env_name.find("4.5") != -1: self.task_list = ["fetchhard_hidden_4.0", "fetchhard_hidden_5.0", "fetchhard_hidden_4.5"]
+                    elif args.env_name.find("5.5") != -1: self.task_list = ["fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_5.5"]
+                    elif args.env_name.find("6.5") != -1: self.task_list = ["fetchhard_hidden_6.0", "fetchhard_hidden_7.0", "fetchhard_hidden_6.5"]
                     elif args.env_name.find("7.5") != -1: self.task_list = ["fetchhard_hidden_7.0", "fetchhard_hidden_0.0", "fetchhard_hidden_7.5"]
                 elif hps_env["task_num"] == 4: # fourwayrelated
-                    if args.env_name.find("4.5") != -1: self.task_list = ["fetchhard_hidden_3.0", "fetchhard_hidden_4.0", "fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_4.5"]
-                    elif args.env_name.find("5.5") != -1: self.task_list = ["fetchhard_hidden_4.0", "fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_7.0", "fetchhard_hidden_5.5"]
-                    elif args.env_name.find("6.5") != -1: self.task_list = ["fetchhard_hidden_5.0", "fetchhard_hidden_6.0", "fetchhard_hidden_7.0", "fetchhard_hidden_0.0", "fetchhard_hidden_6.5"]
-                    elif args.env_name.find("7.5") != -1: self.task_list = ["fetchhard_hidden_6.0", "fetchhard_hidden_7.0", "fetchhard_hidden_0.0", "fetchhard_hidden_1.0", "fetchhard_hidden_7.5"]
+                    if args.env_name.find("4.5") != -1: self.task_list = ["fetchhard_hidden_"+str(i)+".0" for i in range(3, 7)] + ["fetchhard_hidden_4.5"]
+                    elif args.env_name.find("5.5") != -1: self.task_list = ["fetchhard_hidden_"+str(i)+".0" for i in range(4, 8)] + ["fetchhard_hidden_5.5"]
+                    elif args.env_name.find("6.5") != -1: self.task_list = ["fetchhard_hidden_"+str(i)+".0" for i in range [5, 6, 7, 0]] + ["fetchhard_hidden_6.5"]
+                    elif args.env_name.find("7.5") != -1: self.task_list = ["fetchhard_hidden_"+str(i)+".0" for i in range [6, 7, 0, 1]] + ["fetchhard_hidden_7.5"]
                     
                 self.model = FlowModel(hps_env["action"], hps_env["state"], hps_env["task_num"], hps_model["type"], env="fetchreach", seed=args.seed).to(self.device)
                 
@@ -213,6 +211,63 @@ class Flowtrainer:
         
         self.model.save(i, self.args.prefix, self.model_name + "_" +self.hps_env["env_name"]+ "_transfer")
 
+    def train_MP(self, model, k, epoch, train_size):
+        print("start training multiprocessing!", k)
+        self.last_val, self.last_rec = 1e10, 0
+        self.last_model = None
+        self.not_improving_count = 0 
+        self.global_batch_idx = 0
+        self.stop_training = False
+        batch_count, self.test_step_count = 0, 0
+        optimizer = self.hps_train["optimizer"](model.parameters(), lr=self.hps_train["lr_pretrain"])
+        
+        print(epoch, train_size // self.hps_train["batch_size_train"])
+        
+        for i in tqdm(range(epoch)):
+            for j in range(train_size // self.hps_train["batch_size_train"]):
+                # print(train_size, hps_train["batch_size_train"])
+                sample_batched = next(iter(self.train_loader[k])) # draw a batch from the current task
+                inputs = AttrDict(map_dict(lambda x: x.to(self.device), sample_batched))
+                loss, loss_breakdown = self.loss(inputs["state"], inputs["action"], inputs["task_id"])
+                
+                
+                print("training checkpoint 1 for ", k)
+                
+                optimizer.zero_grad()
+                batch_count += 1
+                loss.backward()
+
+                nn.utils.clip_grad_norm(model.parameters(), 0.0001)
+                
+                print("training checkpoint 2 for ", k)        
+                optimizer.step()
+                """
+                if global_batch_idx % self.args.log_interval == 0:
+                    # logging outputs...
+                    # print("batch_idx:", self.global_batch_idx)
+                    self.wandb_log("train", batch_count, loss, loss_breakdown)
+                """
+                print("training checkpoint 3 for ", k)    
+                """
+                if global_batch_idx % self.args.val_interval == 0:
+                    selected_minn, selected_idx = self.val(self.val_loader[k])
+                    # print("selected_minn:", selected_minn, "selected_idx:", selected_idx)
+                """
+                print(k, "loss:", loss, "loss_breakdown:", loss_breakdown, "stop_training:", self.stop_training)  
+                self.global_batch_idx += 1
+                if self.stop_training: 
+                    if selected_idx is None:
+                        selected_idx = self.last_rec 
+                        selected_minn = self.last_val
+                    # wandb.log({"selected_idx": selected_idx, "selected_minn": selected_minn})
+                    # model = last_model in parallel trianing, model = last model cannot be used because it might eliminate the work of other flow training subprocesses.
+                    break
+                print("training checkpoint 4 for ", k)
+            if self.stop_training: break
+        
+        print("stop_training:", self.stop_training)
+        print("i:", i, "j:", j)
+
     def clear(self, lr):
         self.last_val, self.last_rec = 1e10, 0
         self.last_model = None
@@ -226,13 +281,46 @@ class Flowtrainer:
     def train(self, epoch):
         # if not self.args.skip_first_val:
         #    self.val(self.val_loader)
+        
+        # train_size = len(self.train_loader[0].dataset) # number of samples from each subtask
+        
         self.model.train()
-        # wandb.watch(tuple(self.model.model[0].affines.s), log_freq=self.args.log_interval, log="all")
-        # T1, T2, T3 = [], [], []
-        # self.train_loader, self.val_loader = [], []
+        if self.hps_env["task_num"] > 1: # parallelization version
+        
+            # https://pytorch-cn.readthedocs.io/zh/latest/notes/multiprocessing/
+        
+            import torch.multiprocessing as mp
+            
+            model = copy.deepcopy(self.model)
+            
+            model.share_memory()
+            processes = []
+            
+            ctx = mp.get_context("spawn")
+            pool = ctx.Pool(3)
+            pool_list = []
+            
+            """
+            for k in range(self.hps_env["task_num"]):
+                p = mp.Process(target=self.train_MP, args=(model, k, epoch, len(self.train_loader[k].dataset)))
+                p.start()
+                processes.append(p)
+            for p in processes:
+                p.join()
+            """
+            
+            for k in range(self.hps_env["task_num"]):
+                pool_list.append(pool.apply_async(self.train_MP, args=(model, k, epoch, len(self.train_loader[0].dataset))))
+            pool.close()
+            pool.join()
+            
+            print("all flow training finished")
+            
+            self.model = copy.deepcopy(model)
+            exit(0)
         
         print("model:", self.model)
-        train_size = len(self.train_loader[0].dataset) # number of samples from each subtask
+        
         for k in range(self.hps_env["task_num"]):
             self.clear(self.hps_train["lr_pretrain"])
             for i in tqdm(range(epoch)):
@@ -266,11 +354,8 @@ class Flowtrainer:
                         self.model.save(i, self.args.prefix, "temp"+str(k))
                         break
                 if self.stop_training: break
-        wandb.log({"selected_idx": selected_idx, "selected_minn": selected_minn})        
-        
-        # print("finish training")
-        
-        self.model.save(k, self.args.prefix, self.model_name + "_train")
+            wandb.log({"selected_idx": selected_idx, "selected_minn": selected_minn})
+            self.model.save(k, self.args.prefix, self.model_name + "_train")
         
     def val(self, val_loader, test_count=True):
         # run the model on the validation set.
@@ -332,4 +417,3 @@ class Flowtrainer:
                    }
             if other is not None: dct = dict(dct, **other)
             wandb.log(dct)
-
